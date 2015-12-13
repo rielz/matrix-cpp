@@ -55,7 +55,7 @@ namespace test
 		virtual void setup() noexcept { }
 		virtual void cleanup() noexcept { }
 		
-		std::string name()
+		std::string name() noexcept 
 		{
 			return n;
 		}
@@ -67,12 +67,12 @@ namespace test
 	class context
 	{
 	public:
-		context(unit_test& t) : test(t)
+		context(unit_test& t) noexcept  : test(t)
 		{
 			test.setup();
 		}
 		
-		~context()
+		~context() noexcept 
 		{
 			test.cleanup();
 		}
@@ -188,7 +188,7 @@ namespace test
 	}
 }
 
-#define TEST(name, count) \
+#define TEST_IMPL(name, count) \
 void test_##name##_run(test::context& ctx); \
 class test_##name : public test::unit_test \
 { \
@@ -205,5 +205,12 @@ public: \
 static test_##name test_##name##_instance{}; \
 inline void test_##name##_run(test::context& ctx)
 
-#define ASSERT ctx.assert
+#define TEST_ONCE(name) TEST_IMPL(name, 1)
+#define TEST_MULT(name, count) TEST_IMPL(name, count)
+
+#define TEST_SELECT(_0, _1, NAME, ...) NAME
+#define TEST(...) TEST_SELECT(__VA_ARGS__, TEST_MULT, TEST_ONCE)(__VA_ARGS__)
+
+#define ASSERT(condition) ctx.assert(condition, #condition " not true")
 #define ASSERT_EQUALS(expected, actual) ctx.assert_equals(expected, actual, #actual " not equals " #expected)
+#define ASSERT_NOT_EQUALS(expected, actual) ctx.assert_not_equals(expected, actual, #actual " equals " #expected)
