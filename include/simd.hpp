@@ -88,14 +88,38 @@ struct alignas(typename pack_traits<Type, 4>::pack_type) matrix<Type, 4, 1>
 };
 
 template <typename Type>
-typename pack_traits<Type, 4>::pack_type dot(const vector<Type, 4>& a, const vector<Type, 4>& b)
+inline matrix<Type, 2, 2> identity_2x2()
+{
+	typedef pack_traits<Type, 2> op; 
+	
+	return {
+		op::set(1, 0),
+		op::set(0, 1)
+	};
+}
+
+template <typename Type>
+inline matrix<Type, 4, 4> identity_4x4()
+{
+	typedef pack_traits<Type, 4> op; 
+	
+    return {
+        op::set(1, 0, 0, 0),
+        op::set(0, 1, 0, 0),
+        op::set(0, 0, 1, 0),
+        op::set(0, 0, 0, 1)
+	};
+}
+
+template <typename Type>
+inline typename pack_traits<Type, 4>::pack_type dot(const vector<Type, 4>& a, const vector<Type, 4>& b)
 {
     typedef pack_traits<Type, 4> op;
     return op::dot(a.columns[0], b.columns[0]);
 }
 
 template <typename Type, std::size_t M>
-bool operator==(const matrix<Type, M, 4>& a, const matrix<Type, M, 4>& b)
+inline bool operator==(const matrix<Type, M, 4>& a, const matrix<Type, M, 4>& b)
 {
 	typedef pack_traits<Type, M> op;
 	return op::equals(a.columns[0], b.columns[0]) && 
@@ -105,7 +129,7 @@ bool operator==(const matrix<Type, M, 4>& a, const matrix<Type, M, 4>& b)
 }
 
 template <typename Type, std::size_t M>
-bool operator!=(const matrix<Type, M, 4>& a, const matrix<Type, M, 4>& b)
+inline bool operator!=(const matrix<Type, M, 4>& a, const matrix<Type, M, 4>& b)
 {
 	typedef pack_traits<Type, M> op;
 	return !op::equals(a.columns[0], b.columns[0]) || 

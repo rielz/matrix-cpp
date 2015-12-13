@@ -49,6 +49,7 @@ struct pack_traits<double, 2> : public sse_traits
     static pack_type mul(const pack_type& a, const pack_type& b) { return _mm_mul_pd(a, b); }
     static pack_type div(const pack_type& a, const pack_type& b) { return _mm_div_pd(a, b); }
     static pack_type set(value_type c) { return _mm_set1_pd(c); }
+	static pack_type set(value_type a, value_type b) { return _mm_setr_pd(a, b); }
 };
 
 template <>
@@ -63,6 +64,7 @@ struct pack_traits<std::int64_t, 2> : public sse_traits
     static pack_type mul(const pack_type& a, const pack_type& b);
     static pack_type div(const pack_type& a, const pack_type& b);
     static pack_type set(value_type c) { return _mm_set1_epi64x(c); }
+	static pack_type set(value_type a, value_type b) { return _mm_set_epi64x(b, a); }
 };
 
 template <>
@@ -77,6 +79,7 @@ struct pack_traits<float, 4> : public sse_traits
     static pack_type mul(const pack_type& a, const pack_type& b) { return _mm_mul_ps(a, b); }
     static pack_type div(const pack_type& a, const pack_type& b) { return _mm_div_ps(a, b); }
     static pack_type set(value_type c) { return _mm_set1_ps(c); }
+	static pack_type set(value_type a, value_type b, value_type c, value_type d) { return _mm_setr_ps(a, b, c, d); }
 	
 	static bool equals(const pack_type& a, const pack_type& b)
 	{
@@ -108,6 +111,7 @@ struct pack_traits<std::int32_t, 4> : public sse_traits
     static pack_type mul(const pack_type& a, const pack_type& b);
     static pack_type div(const pack_type& a, const pack_type& b);
     static pack_type set(value_type c) { return _mm_set1_epi32(c); }
+	static pack_type set(value_type a, value_type b, value_type c, value_type d) { return _mm_setr_epi32(a, b, c, d); }
 };
 
 #ifdef __AVX__
@@ -157,43 +161,3 @@ struct pack_traits<std::int32_t, 8> : public sse_traits
     static pack_type set(value_type c) { return _mm256_set1_epi32(c); }
 };
 #endif
-
-template <>
-inline matrix<double, 2, 2> identity<double, 2>()
-{
-	return {
-		1.0, 0.0,
-		0.0, 1.0
-	};
-}
-
-template <>
-inline matrix<std::int64_t, 2, 2> identity<std::int64_t, 2>()
-{
-	return {
-		1l, 0l,
-		0l, 1l
-	};
-}
-
-template <>
-inline matrix<float, 4, 4> identity<float, 4>()
-{
-    return {
-        1.0f, 0.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 0.0f, 1.0f
-	};
-}
-
-template <>
-inline matrix<std::int32_t, 4, 4> identity<std::int32_t, 4>()
-{
-    return {
-        _mm_setr_epi32(1, 0, 0, 0),
-		_mm_setr_epi32(0, 1, 0, 0),
-		_mm_setr_epi32(0, 0, 1, 0),
-		_mm_setr_epi32(0, 0, 0, 1)
-	};
-}
