@@ -3,7 +3,7 @@ CXX := clang++-3.7
 GDB := gdb
 FORMAT := clang-format-3.7
 
-CXX_FLAGS += -std=c++14 -msse3 -Iinclude/
+CXX_FLAGS += -std=c++14 -msse -msse2 -msse3 -Iinclude/
 CXX_FLAGS += -Wall -Wextra -Wno-missing-braces
 # -pedantic-errors
 
