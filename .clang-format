@@ -1,0 +1,19 @@
+AlignAfterOpenBracket: false
+AlignConsecutiveAssignments: false
+AlignEscapedNewlinesLeft: false
+AlignOperands: false
+AlignTrailingComments: false
+
+AllowShortBlocksOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+AlwaysBreakTemplateDeclarations: true
+
+BreakBeforeBraces: Allman
+ColumnLimit: 0
+Cpp11BracedListStyle: true
+IndentWidth: 4
+Language: Cpp
+NamespaceIndentation: All
+PointerAlignment: Left
+Standard: Cpp11
+UseTab: ForIndentation
